@@ -7,7 +7,7 @@
 //
 import Foundation
 
-struct MimeType {
+public struct MimeType {
     var type:String
     var fileExtension:String
 }
