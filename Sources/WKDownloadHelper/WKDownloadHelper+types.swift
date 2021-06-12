@@ -10,4 +10,9 @@ import Foundation
 public struct MimeType {
     var type:String
     var fileExtension:String
+    
+    public init(type: String, fileExtension: String) {
+        self.type = type
+        self.fileExtension = fileExtension
+    }
 }
