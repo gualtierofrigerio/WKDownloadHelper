@@ -11,7 +11,7 @@ import WebKit
 
 @available(iOS 11.0, *)
 public class WKDownloadHelper: NSObject {
-    init(webView: WKWebView,
+    public init(webView: WKWebView,
          supportedMimeTypes: [MimeType],
          delegate: WKDownloadHelperDelegate) {
         self.webView = webView
