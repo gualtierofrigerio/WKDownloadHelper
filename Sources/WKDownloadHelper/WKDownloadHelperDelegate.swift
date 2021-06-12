@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol WKDownloadHelperDelegate {
+public protocol WKDownloadHelperDelegate {
     func canNavigate(toUrl: URL) -> Bool // optional
     func didDownloadFile(atUrl: URL) // required
     func didFailDownloadingFile(error: Error) // optional
