@@ -10,7 +10,7 @@ import Foundation
 import WebKit
 
 @available(iOS 11.0, *)
-class WKDownloadHelper: NSObject {
+public class WKDownloadHelper: NSObject {
     init(webView: WKWebView,
          supportedMimeTypes: [MimeType],
          delegate: WKDownloadHelperDelegate) {

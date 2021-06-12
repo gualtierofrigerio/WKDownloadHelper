@@ -11,7 +11,7 @@ import WebKit
 
 @available(iOS 11.0, *)
 extension WKDownloadHelper: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let delegate = delegate,
            let url = navigationAction.request.url {
             let allow = delegate.canNavigate(toUrl: url)
@@ -27,7 +27,7 @@ extension WKDownloadHelper: WKNavigationDelegate {
         }
     }
     
-    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         guard let url = navigationResponse.response.url else {
             decisionHandler(.cancel)
             return
@@ -64,14 +64,14 @@ extension WKDownloadHelper: WKNavigationDelegate {
     }
     
     @available(iOS 14.5, *)
-    func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
+    public func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
         download.delegate = self
     }
 }
 
 @available(iOS 14.5, *)
 extension WKDownloadHelper: WKDownloadDelegate {
-    func download(_ download: WKDownload, decideDestinationUsing response: URLResponse, suggestedFilename: String, completionHandler: @escaping (URL?) -> Void) {
+    public func download(_ download: WKDownload, decideDestinationUsing response: URLResponse, suggestedFilename: String, completionHandler: @escaping (URL?) -> Void) {
         let temporaryDir = NSTemporaryDirectory()
         let fileName = temporaryDir + "/" + suggestedFilename
         let url = URL(fileURLWithPath: fileName)
@@ -79,11 +79,11 @@ extension WKDownloadHelper: WKDownloadDelegate {
         completionHandler(url)
     }
     
-    func download(_ download: WKDownload, didFailWithError error: Error, resumeData: Data?) {
+    public func download(_ download: WKDownload, didFailWithError error: Error, resumeData: Data?) {
         delegate?.didFailDownloadingFile(error: error)
     }
     
-    func downloadDidFinish(_ download: WKDownload) {
+    public func downloadDidFinish(_ download: WKDownload) {
         if let url = fileDestinationURL,
            let delegate = self.delegate {
             delegate.didDownloadFile(atUrl: url)
