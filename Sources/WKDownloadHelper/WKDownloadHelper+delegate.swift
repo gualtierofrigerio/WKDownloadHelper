@@ -9,6 +9,8 @@
 import Foundation
 import WebKit
 
+/// WKNavigation and WKDownload delegate implementation
+
 @available(iOS 11.0, *)
 extension WKDownloadHelper: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
