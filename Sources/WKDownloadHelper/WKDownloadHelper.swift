@@ -49,10 +49,11 @@ public class WKDownloadHelper: NSObject {
     internal func downloadData(fromURL url:URL,
                               fileName:String,
                               completion:@escaping (Bool, URL?) -> Void) {
+        let downloadURL = removeBlob(fromUrl: url)
         webView.configuration.websiteDataStore.httpCookieStore.getAllCookies() { cookies in
             let session = URLSession.shared
             session.configuration.httpCookieStorage?.setCookies(cookies, for: url, mainDocumentURL: nil)
-            let task = session.downloadTask(with: url) { localURL, urlResponse, error in
+            let task = session.downloadTask(with: downloadURL) { localURL, urlResponse, error in
                 if let localURL = localURL {
                     let destinationURL = self.moveDownloadedFile(url: localURL, fileName: fileName)
                     completion(true, destinationURL)
@@ -130,5 +131,14 @@ public class WKDownloadHelper: NSObject {
         try? FileManager.default.removeItem(at: destinationURL)
         try? FileManager.default.moveItem(at: url, to: destinationURL)
         return destinationURL
+    }
+    
+    /// Remove blob in front of an URL
+    /// - Parameter fromUrl: The url from where blob has to be removed
+    /// - Returns: A URL without blob
+    internal func removeBlob(fromUrl: URL) -> URL {
+        let downloadURLString = fromUrl.absoluteString
+        return URL(string: downloadURLString.replacingOccurrences(of: "blob:",
+                                                                  with: ""))!
     }
 }
