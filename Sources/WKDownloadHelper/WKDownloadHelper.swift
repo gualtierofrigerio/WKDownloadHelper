@@ -138,7 +138,11 @@ public class WKDownloadHelper: NSObject {
     /// - Returns: A URL without blob
     internal func removeBlob(fromUrl: URL) -> URL {
         let downloadURLString = fromUrl.absoluteString
-        return URL(string: downloadURLString.replacingOccurrences(of: "blob:",
-                                                                  with: ""))!
+        if downloadURLString.starts(with: "blob:") {
+            return URL(string: String(downloadURLString.dropFirst(5)))!
+        }
+        else {
+            return fromUrl
+        }
     }
 }
