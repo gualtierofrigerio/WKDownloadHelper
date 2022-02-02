@@ -29,15 +29,36 @@ public protocol WKDownloadHelperDelegate {
     /// Called in case of error while downloading a file
     /// - Parameter error: the Error occurred while downloading the file
     func didFailDownloadingFile(error: Error)
+    
+    
+    /// Provide a local url path where the file will be downloaded
+    /// - Returns: An optional url of the file
+    func localURLForFile(withName: String) -> URL?
 }
 
 /// default implementation of optional methods
 extension WKDownloadHelperDelegate {
-    func canNavigate(toUrl: URL) -> Bool {
+    public func canNavigate(toUrl: URL) -> Bool {
         true
     }
     
-    func didFailDownloadingFile(error: Error) {
+    public func didFailDownloadingFile(error: Error) {
         
+    }
+    
+    /// The default implementation saves the file in the temporary directory
+    /// inside a rando UUID directory to avoid conflicts of file names
+    public func localURLForFile(withName name: String) -> URL? {
+        let temporaryDir = NSTemporaryDirectory()
+        var url = URL(fileURLWithPath: temporaryDir)
+        url = url.appendingPathComponent(UUID().uuidString)
+        do {
+            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: false)
+        }
+        catch {
+            return nil
+        }
+        url = url.appendingPathComponent(name)
+        return url
     }
 }
