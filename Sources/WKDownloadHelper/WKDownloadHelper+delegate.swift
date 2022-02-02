@@ -74,18 +74,10 @@ extension WKDownloadHelper: WKNavigationDelegate {
 @available(iOS 14.5, *)
 extension WKDownloadHelper: WKDownloadDelegate {
     public func download(_ download: WKDownload, decideDestinationUsing response: URLResponse, suggestedFilename: String, completionHandler: @escaping (URL?) -> Void) {
-        let temporaryDir = NSTemporaryDirectory()
-        var url = URL(fileURLWithPath: temporaryDir)
-        url = url.appendingPathComponent(UUID().uuidString)
-        do {
-            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: false)
-        }
-        catch {
-            print("WKDownloadHelper cannot create directory at path \(url)")
+        guard let url = delegate?.localURLForFile(withName: suggestedFilename) else {
             completionHandler(nil)
             return
         }
-        url = url.appendingPathComponent(suggestedFilename)
         fileDestinationURL = url
         completionHandler(url)
     }
